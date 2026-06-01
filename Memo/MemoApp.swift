@@ -10,6 +10,7 @@ struct MemoApp: App {
     init() {
         WorldAnchorComponent.registerComponent()
         NoteDescriptorComponent.registerComponent()
+        MemoCardComponent.registerComponent()
     }
 
     var body: some SwiftUI.Scene {
