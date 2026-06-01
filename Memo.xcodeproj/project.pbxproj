@@ -165,6 +165,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
+				INFOPLIST_KEY_NSHandsTrackingUsageDescription = "메모를 손으로 잡고 옮기기 위해 필요합니다.";
+				INFOPLIST_KEY_NSWorldSensingUsageDescription = "메모를 공간의 원하는 위치에 고정하기 위해 필요합니다.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -194,6 +196,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
+				INFOPLIST_KEY_NSHandsTrackingUsageDescription = "메모를 손으로 잡고 옮기기 위해 필요합니다.";
+				INFOPLIST_KEY_NSWorldSensingUsageDescription = "메모를 공간의 원하는 위치에 고정하기 위해 필요합니다.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
