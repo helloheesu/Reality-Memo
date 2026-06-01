@@ -22,8 +22,12 @@ struct ContentView: View {
 
             ToggleImmersiveSpaceButton()
 
-            Button("메모 목록 열기") {
+            Button("메모 목록 열기 (2D 윈도우)") {
                 openWindow(id: "MemoList")
+            }
+
+            Button("메모 볼륨 열기 (3D 끌어내기)") {
+                openWindow(id: "MemoVolume")
             }
         }
         .padding()

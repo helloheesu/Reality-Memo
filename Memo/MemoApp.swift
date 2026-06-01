@@ -10,6 +10,7 @@ struct MemoApp: App {
     init() {
         WorldAnchorComponent.registerComponent()
         NoteDescriptorComponent.registerComponent()
+        MemoCardComponent.registerComponent()
     }
 
     var body: some SwiftUI.Scene {
@@ -19,10 +20,18 @@ struct MemoApp: App {
         }
         .modelContainer(for: PersistedNote.self)
 
-        // 메모 목록 윈도우 (더미). 카드를 공간으로 드래그하면 메모 스폰.
+        // 메모 목록 윈도우 (더미, 2D). 윈도우→공간 드래그는 visionOS 한계로 동작 X — 비교용 참고.
         WindowGroup(id: "MemoList") {
             MemoListView()
         }
+
+        // Approach V — 볼륨 윈도우 (3D 카드). 끌어내면 immersive 공간에 스폰 요청.
+        WindowGroup(id: "MemoVolume") {
+            MemoVolumeView()
+                .environment(appModel)
+        }
+        .windowStyle(.volumetric)
+        .defaultSize(width: 0.5, height: 0.4, depth: 0.3, in: .meters)
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()
