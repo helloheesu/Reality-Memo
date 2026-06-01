@@ -20,7 +20,6 @@ final class PersistedNote {
     var width: Double
     var height: Double
     var thickness: Double
-    var tilt: Double
 
     init(anchorID: UUID, descriptor d: NoteDescriptorComponent) {
         self.anchorID = anchorID
@@ -32,6 +31,5 @@ final class PersistedNote {
         self.width = Double(d.width)
         self.height = Double(d.height)
         self.thickness = Double(d.thickness)
-        self.tilt = Double(d.tilt)
     }
 }

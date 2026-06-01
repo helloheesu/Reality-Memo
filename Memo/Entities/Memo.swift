@@ -8,8 +8,7 @@ func makeNoteEntity(
     color: UIColor = .yellow,
     width: Float = 0.15,       // 가로 (좌우)
     height: Float = 0.10,      // 세로 (위아래)
-    thickness: Float = 0.005,  // 두께 (앞뒤)
-    tilt: Float = 0            // ← 라디안. 0이면 똑바로
+    thickness: Float = 0.005   // 두께 (앞뒤)
 ) -> ModelEntity {
     let note = ModelEntity(
         mesh: .generateBox(
@@ -18,10 +17,7 @@ func makeNoteEntity(
         ),
         materials: [SimpleMaterial(color: color, isMetallic: false)]
     )
-    
-    // Z축(앞뒤 축) 기준 회전 = 시계/반시계로 기울이기
-    note.transform.rotation = simd_quatf(angle: tilt, axis: [0, 0, 1])
-    
+
     // configureEntity로 인터랙션 셋업
     ManipulationComponent.configureEntity(
         note,
@@ -31,7 +27,7 @@ func makeNoteEntity(
     
     // 호버 이펙트 추가
     note.components.set(HoverEffectComponent())
-    
+
     // 놓은 자리에 그대로 있게: releaseBehavior = .stay
     if var manipulation = note.components[ManipulationComponent.self] {
         manipulation.releaseBehavior = .stay
@@ -50,7 +46,7 @@ func makeNoteEntity(
     note.components.set(NoteDescriptorComponent(
         text: text,
         red: r, green: g, blue: b, alpha: a,
-        width: width, height: height, thickness: thickness, tilt: tilt
+        width: width, height: height, thickness: thickness
     ))
 
     return note
@@ -69,8 +65,7 @@ func makeNoteEntity(from note: PersistedNote) -> ModelEntity {
         color: color,
         width: Float(note.width),
         height: Float(note.height),
-        thickness: Float(note.thickness),
-        tilt: Float(note.tilt)
+        thickness: Float(note.thickness)
     )
 }
 
@@ -126,21 +121,6 @@ private struct NoteTextView: View {
     }
 }
 
-#Preview("랜덤 기울기", immersionStyle: .mixed) {
-    RealityView { content in
-        for i in 0..<5 {
-            let randomTilt = Float.random(in: -0.1...0.1)
-            let note = makeNoteEntity(tilt: randomTilt)
-            note.position = SIMD3<Float>(
-                x: Float(i - 2) * 0.18,
-                y: 1.5,
-                z: -1.0
-            )
-            content.add(note)
-        }
-    }
-}
-
 #Preview("텍스트 메모 - RealityView attachments", immersionStyle: .mixed) {
     RealityView { content, attachments in
         let note = makeNoteEntity()
@@ -170,8 +150,7 @@ private struct NoteTextView: View {
         
         for (i, text) in texts.enumerated() {
             let note = makeNoteEntity(
-                color: .yellow,
-                tilt: Float.random(in: -0.05...0.05)
+                color: .yellow
             )
             note.position = SIMD3<Float>(
                 x: Float(i - 1) * 0.2,
@@ -212,8 +191,7 @@ private struct NoteTextView: View {
         let texts = ["우유 사기", "회의 14시", "내일 발표"]
         for (i, text) in texts.enumerated() {
             let note = makeNoteEntity(
-                text: text,
-                tilt: Float.random(in: -0.05...0.05)
+                text: text
             )
             note.position = SIMD3<Float>(
                 x: Float(i - 1) * 0.2,

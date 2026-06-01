@@ -12,5 +12,4 @@ struct NoteDescriptorComponent: Component {
     var width: Float
     var height: Float
     var thickness: Float
-    var tilt: Float
 }
