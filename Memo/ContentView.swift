@@ -11,6 +11,8 @@ import RealityKitContent
 
 struct ContentView: View {
 
+    @Environment(\.openWindow) private var openWindow
+
     var body: some View {
         VStack {
             Model3D(named: "Scene", bundle: realityKitContentBundle)
@@ -19,6 +21,10 @@ struct ContentView: View {
             Text("Hello, world!")
 
             ToggleImmersiveSpaceButton()
+
+            Button("메모 목록 열기") {
+                openWindow(id: "MemoList")
+            }
         }
         .padding()
     }

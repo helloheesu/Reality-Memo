@@ -19,6 +19,11 @@ struct MemoApp: App {
         }
         .modelContainer(for: PersistedNote.self)
 
+        // 메모 목록 윈도우 (더미). 카드를 공간으로 드래그하면 메모 스폰.
+        WindowGroup(id: "MemoList") {
+            MemoListView()
+        }
+
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()
                 .environment(appModel)
