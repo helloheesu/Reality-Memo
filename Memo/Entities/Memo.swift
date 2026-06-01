@@ -1,14 +1,16 @@
 import RealityKit
 import SwiftUI
+import UIKit
+import CoreText
 
 // MARK: - Note Entity Factory
 
 func makeNoteEntity(
     text: String = "",
     color: UIColor = .yellow,
-    width: Float = 0.15,       // 가로 (좌우)
-    height: Float = 0.10,      // 세로 (위아래)
-    thickness: Float = 0.005   // 두께 (앞뒤)
+    width: Float = 0.20,       // 가로 (좌우)
+    height: Float = 0.14,      // 세로 (위아래)
+    thickness: Float = 0.006   // 두께 (앞뒤)
 ) -> ModelEntity {
     let note = ModelEntity(
         mesh: .generateBox(
@@ -34,11 +36,16 @@ func makeNoteEntity(
         note.components.set(manipulation)
     }
     
-    // 텍스트가 있으면 부착
+    // 텍스트가 있으면 네이티브 텍스트 메쉬로 앞면에 부착 (깊이 정렬 정상 + 입력 안 가로챔)
     if !text.isEmpty {
-        note.components.set(ViewAttachmentComponent(
-            rootView: NoteTextView(text: text)
-        ))
+        let label = makeLabelEntity(
+            text,
+            fontSize: 0.014,
+            maxWidth: width - 0.03,
+            maxHeight: height - 0.02,
+            frontZ: thickness / 2 + 0.001
+        )
+        note.addChild(label)
     }
 
     // 저작 파라미터를 엔티티에 보관 (영속화/복원 단일 출처)
@@ -78,17 +85,28 @@ private extension UIColor {
     }
 }
 
-// 메모 안에 들어갈 텍스트 뷰 (별도 struct로 빼서 깔끔하게)
-private struct NoteTextView: View {
-    let text: String
-    
-    var body: some View {
-        Text(text)
-            .font(.body)
-            .foregroundStyle(.black)
-            .padding(8)
-            .frame(maxWidth: 130, maxHeight: 80)  // 메모 크기 안에 맞추기
-    }
+/// 면(메모/카드)에 붙일 평면 텍스트 엔티티. RealityKit 네이티브 텍스트라 깊이 정렬이 본체와 함께 처리되고
+/// 입력을 가로채지 않는다. (SwiftUI 어태치먼트와 달리 스크롤/말줄임은 없음 — 길면 줄바꿈해 면 안에 채움.)
+func makeLabelEntity(
+    _ text: String,
+    fontSize: CGFloat,
+    maxWidth: Float,
+    maxHeight: Float,
+    frontZ: Float
+) -> ModelEntity {
+    let mesh = MeshResource.generateText(
+        text,
+        extrusionDepth: 0.0006,
+        font: .systemFont(ofSize: fontSize),
+        containerFrame: CGRect(x: 0, y: 0, width: CGFloat(maxWidth), height: CGFloat(maxHeight)),
+        alignment: .left,
+        lineBreakMode: .byWordWrapping
+    )
+    let label = ModelEntity(mesh: mesh, materials: [UnlitMaterial(color: .black)])
+    // 메쉬 바운즈 기준으로 면 중앙에 정렬
+    let center = label.visualBounds(relativeTo: label).center
+    label.position = SIMD3<Float>(-center.x, -center.y, frontZ)
+    return label
 }
 
 // MARK: - Previews

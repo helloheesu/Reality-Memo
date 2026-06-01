@@ -11,24 +11,14 @@ import RealityKitContent
 
 struct ContentView: View {
 
-    @Environment(\.openWindow) private var openWindow
-
     var body: some View {
         VStack {
             Model3D(named: "Scene", bundle: realityKitContentBundle)
                 .padding(.bottom, 50)
 
-            Text("Hello, world!")
+            Text("메모 목록은 공간(immersive)에 보드로 표시됩니다.")
 
             ToggleImmersiveSpaceButton()
-
-            Button("메모 목록 열기 (2D 윈도우)") {
-                openWindow(id: "MemoList")
-            }
-
-            Button("메모 볼륨 열기 (3D 끌어내기)") {
-                openWindow(id: "MemoVolume")
-            }
         }
         .padding()
     }
