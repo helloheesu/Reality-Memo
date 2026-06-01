@@ -22,20 +22,28 @@ func makeNoteEntity(
     // Z축(앞뒤 축) 기준 회전 = 시계/반시계로 기울이기
     note.transform.rotation = simd_quatf(angle: tilt, axis: [0, 0, 1])
     
-    // ⭐ 손으로 잡고 조작 가능하게
-    note.components.set(InputTargetComponent())
-    note.components.set(CollisionComponent(
-        shapes: [.generateBox(size: [width, height, thickness])]
-    ))
+    // configureEntity로 인터랙션 셋업
+    ManipulationComponent.configureEntity(
+        note,
+        allowedInputTypes: .all,
+        collisionShapes: [.generateBox(size: [width, height, thickness])]
+    )
+    
+    // 호버 이펙트 추가
     note.components.set(HoverEffectComponent())
-    note.components.set(ManipulationComponent())
+    
+    // 놓은 자리에 그대로 있게: releaseBehavior = .stay
+    if var manipulation = note.components[ManipulationComponent.self] {
+        manipulation.releaseBehavior = .stay
+        note.components.set(manipulation)
+    }
     
     // 텍스트가 있으면 부착
-        if !text.isEmpty {
-            note.components.set(ViewAttachmentComponent(
-                rootView: NoteTextView(text: text)
-            ))
-        }
+    if !text.isEmpty {
+        note.components.set(ViewAttachmentComponent(
+            rootView: NoteTextView(text: text)
+        ))
+    }
     
     return note
 }
