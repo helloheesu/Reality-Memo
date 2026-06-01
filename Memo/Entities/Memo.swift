@@ -8,8 +8,8 @@ func makeNoteEntity(
     color: UIColor = .yellow,
     width: Float = 0.15,       // 가로 (좌우)
     height: Float = 0.10,      // 세로 (위아래)
-    thickness: Float = 0.005,   // 두께 (앞뒤)
-    tilt: Float = 0           // ← 라디안. 0이면 똑바로
+    thickness: Float = 0.005,  // 두께 (앞뒤)
+    tilt: Float = 0            // ← 라디안. 0이면 똑바로
 ) -> ModelEntity {
     let note = ModelEntity(
         mesh: .generateBox(

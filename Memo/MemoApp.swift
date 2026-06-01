@@ -1,23 +1,21 @@
-//
-//  MemoApp.swift
-//  Memo
-//
-//  Created by Heesu on 5/31/26.
-//
-
 import SwiftUI
+import RealityKit
 
 @main
 struct MemoApp: App {
-
+    
     @State private var appModel = AppModel()
-
-    var body: some Scene {
+    
+    init() {
+        WorldAnchorComponent.registerComponent()
+    }
+    
+    var body: some SwiftUI.Scene {
         WindowGroup {
             ContentView()
                 .environment(appModel)
         }
-
+        
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()
                 .environment(appModel)
@@ -29,5 +27,5 @@ struct MemoApp: App {
                 }
         }
         .immersionStyle(selection: .constant(.mixed), in: .mixed)
-     }
+    }
 }
