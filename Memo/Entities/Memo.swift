@@ -44,8 +44,43 @@ func makeNoteEntity(
             rootView: NoteTextView(text: text)
         ))
     }
-    
+
+    // 저작 파라미터를 엔티티에 보관 (영속화/복원 단일 출처)
+    let (r, g, b, a) = color.rgbaDoubles
+    note.components.set(NoteDescriptorComponent(
+        text: text,
+        red: r, green: g, blue: b, alpha: a,
+        width: width, height: height, thickness: thickness, tilt: tilt
+    ))
+
     return note
+}
+
+/// 영속 데이터로부터 메모 엔티티 재생성 (앱 재실행 시 복원용).
+func makeNoteEntity(from note: PersistedNote) -> ModelEntity {
+    let color = UIColor(
+        red: CGFloat(note.r),
+        green: CGFloat(note.g),
+        blue: CGFloat(note.b),
+        alpha: CGFloat(note.a)
+    )
+    return makeNoteEntity(
+        text: note.text,
+        color: color,
+        width: Float(note.width),
+        height: Float(note.height),
+        thickness: Float(note.thickness),
+        tilt: Float(note.tilt)
+    )
+}
+
+private extension UIColor {
+    /// RGBA 성분을 Double(0...1)로 추출.
+    var rgbaDoubles: (Double, Double, Double, Double) {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        return (Double(r), Double(g), Double(b), Double(a))
+    }
 }
 
 // 메모 안에 들어갈 텍스트 뷰 (별도 struct로 빼서 깔끔하게)
