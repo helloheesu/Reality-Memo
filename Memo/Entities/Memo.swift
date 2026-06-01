@@ -92,7 +92,8 @@ func makeLabelEntity(
     fontSize: CGFloat,
     maxWidth: Float,
     maxHeight: Float,
-    frontZ: Float
+    frontZ: Float,
+    lineBreakMode: CTLineBreakMode = .byWordWrapping
 ) -> ModelEntity {
     let mesh = MeshResource.generateText(
         text,
@@ -100,7 +101,7 @@ func makeLabelEntity(
         font: .systemFont(ofSize: fontSize),
         containerFrame: CGRect(x: 0, y: 0, width: CGFloat(maxWidth), height: CGFloat(maxHeight)),
         alignment: .left,
-        lineBreakMode: .byWordWrapping
+        lineBreakMode: lineBreakMode
     )
     let label = ModelEntity(mesh: mesh, materials: [UnlitMaterial(color: .black)])
     // 메쉬 바운즈 기준으로 면 중앙에 정렬

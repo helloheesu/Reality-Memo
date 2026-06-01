@@ -1,19 +1,14 @@
 import Foundation
 import SwiftUI
 import UIKit
-import UniformTypeIdentifiers
 
-/// 메모 카드/스폰에 쓰는 데이터. 2D 윈도우 드래그용 Transferable도 겸함.
-struct MemoPayload: Codable, Hashable, Transferable {
+/// 메모 카드/스폰에 쓰는 데이터.
+struct MemoPayload: Codable, Hashable {
     var text: String
     var r: Double
     var g: Double
     var b: Double
     var a: Double
-
-    static var transferRepresentation: some TransferRepresentation {
-        CodableRepresentation(contentType: .memoPayload)
-    }
 
     /// 테스트용 더미 메모 목록 (길이 짧은/긴 것 섞음).
     static let dummies: [MemoPayload] = [
@@ -31,9 +26,4 @@ struct MemoPayload: Codable, Hashable, Transferable {
     var uiColor: UIColor {
         UIColor(red: CGFloat(r), green: CGFloat(g), blue: CGFloat(b), alpha: CGFloat(a))
     }
-}
-
-extension UTType {
-    /// 앱 내부 드래그용 커스텀 타입.
-    static let memoPayload = UTType(exportedAs: "com.heesu.Memo.memo-payload")
 }
